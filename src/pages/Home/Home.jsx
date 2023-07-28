@@ -15,25 +15,25 @@ const Home = () => {
   }, [page]);
   return (
     <div>
-      <section className="mt-16">
-        <h1 className="text-8xl">
+      <section className="lg:mt-16 mt-10">
+        <h1 className="lg:text-8xl text-5xl">
           <span className="font-bold">Hey, we’re Blogerz.</span>
           <span> See our thoughts, stories and ideas.</span>
         </h1>
 
-        <div className="my-24 space-y-3">
-          <div className="bg-gray-200 w-[35rem] flex rounded-full">
+        <div className="lg:my-24 my-10 space-y-3">
+          <div className="bg-gray-200 lg:w-[35rem] flex rounded-full">
             <input
               type="text"
-              className="text-2xl py-4 px-7 rounded-lg w-full bg-transparent outline-none"
+              className="lg:text-2xl text-lg py-2 lg:py-4 px-7 rounded-lg w-full bg-transparent outline-none"
               placeholder="Newsletter..."
             />
 
-            <button className="capitalize bg-black py-4 px-14 rounded-full text-white text-2xl font-medium">
+            <button className="capitalize bg-black lg:py-4 py-2 lg:px-14 px-4 rounded-full text-white lg:text-2xl text-lg font-medium">
               subscribe
             </button>
           </div>
-          <p className=" mx-3 text-lg">
+          <p className="mx-3 text-lg">
             Get the email newsletter and unlock access to members-only content
             and updates
           </p>
@@ -57,7 +57,7 @@ const Home = () => {
         </section>
       ) : (
         <section>
-          <h2 className="text-4xl font-semibold my-3 ">This is latest posts</h2>
+          <h2 className="text-4xl font-semibold my-3 capitalize underline">latest posts</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {postLists?.posts?.map((post) => (
               <Post post={post} key={post._id} />

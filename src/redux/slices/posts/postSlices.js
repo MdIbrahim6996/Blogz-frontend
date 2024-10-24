@@ -25,12 +25,10 @@ export const createpostAction = createAsyncThunk(
       console.log(post, "slice");
 
       const { data } = await axios.post(
-        `${baseUrl}/api/posts`,
+        `${baseUrl}/api/posts/create`,
         post,
         config
       );
-      //dispatch action
-      // dispatch(resetPost());
       return data;
     } catch (error) {
       if (!error?.response) throw error;
@@ -43,7 +41,6 @@ export const createpostAction = createAsyncThunk(
 export const updatePostAction = createAsyncThunk(
   "post/updated",
   async (post, { rejectWithValue, getState, dispatch }) => {
-    console.log(post);
     //get user token
     const user = getState()?.users;
     const { userAuth } = user;

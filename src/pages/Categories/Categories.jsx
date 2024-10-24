@@ -29,7 +29,7 @@ const Categories = () => {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {categoryList?.map((category) => (
-              <div className="bg-black cursor-pointer text-lg font-semibold text-white rounded-md text-center p-5 hover:bg-transparent hover:text-black border transition-all duration-200 border-black">
+              <div className="cursor-pointer text-lg font-semibold rounded-md text-center p-5 hover:bg-black hover:text-white border transition-all duration-200 border-black">
                 {category?.title}
               </div>
             ))}

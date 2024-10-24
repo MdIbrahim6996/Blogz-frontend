@@ -28,18 +28,14 @@ const Login = () => {
   } = useForm();
 
   const onSubmit = (data) => {
-    console.log(data);
     dispatch(loginUserAction(data));
     reset();
-    navigate("/");
   };
   return (
     <section className="flex h-screen">
       {/* LEFT */}
       <div className="flex bg-gradient-to-br from-black to-black/80 p-16 flex-col w-[45%]">
-        <p className="font-bold italic text-2xl text-white">
-          Blogz
-        </p>
+        <p className="font-bold italic text-2xl text-white">Blogz</p>
         <p className="my-5 text-4xl font-bold  text-white ">
           Discover the world’s top Designers & Creatives.
         </p>
@@ -49,7 +45,7 @@ const Login = () => {
 
       <div className="bg-white w-full flex justify-center items-center ">
         <div className="w-[40%]">
-          <h1 className="text-4xl font-semibold">Sign in to Dribbble</h1>
+          <h1 className="text-4xl font-semibold">Sign in to Blogz</h1>
           {state?.appErr && (
             <p className="text-red-500 mt-1">{state?.appErr}</p>
           )}
@@ -105,9 +101,7 @@ const Login = () => {
             </div>
 
             <Link to="/auth/forgot-password">
-              <p className="text-blue-600 capitalize">
-                forgot password
-              </p>
+              <p className="text-blue-600 capitalize">forgot password</p>
             </Link>
 
             <Link to="/auth/register">
@@ -117,8 +111,20 @@ const Login = () => {
               </p>
             </Link>
 
-            <button className="bg-black text-white capitalize py-2 px-16 font-semibold rounded-md my-4">
+            <button className="bg-black text-white capitalize py-2 px-16 font-semibold rounded-md my-2">
               signin
+            </button>
+            <button
+              onClick={() => {
+                reset({
+                  email: "user@email.com",
+                  password: "123456",
+                });
+                handleSubmit(onSubmit);
+              }}
+              className="bg-black text-white capitalize py-2 px-16 font-semibold rounded-md my-"
+            >
+              signin with demo credentials
             </button>
           </form>
         </div>

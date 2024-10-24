@@ -18,7 +18,6 @@ export const registerUserAction = createAsyncThunk(
         user,
         config
       );
-      console.log("register", data);
       return data;
     } catch (error) {
       if (!error.response) {
@@ -298,7 +297,6 @@ export const passwordResetTokenAction = createAsyncThunk(
         { email },
         config
       );
-      console.log(data);
       return data;
     } catch (error) {
       if (!error.response) {
@@ -318,7 +316,6 @@ export const passwordResetAction = createAsyncThunk(
         "Content-Type": "application/json",
       },
     };
-    console.log(user);
     //http call
     try {
       const { data } = await axios.put(
@@ -326,7 +323,6 @@ export const passwordResetAction = createAsyncThunk(
         { password: user?.password, token: user?.token },
         config
       );
-      console.log(data);
       return data;
     } catch (error) {
       if (!error.response) {

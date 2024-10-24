@@ -1,13 +1,24 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { registerUserAction } from "../../../redux/slices/users/usersSlices";
+import { useEffect, useState } from "react";
 
 const address =
   "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRg_2Rfr-WwwMFEmy19tl00TlTUcmIhNUdomw&usqp=CAU";
 const Register = () => {
   const dispatch = useDispatch();
   const state = useSelector((state) => state.users);
+  const { userAuth } = state;
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (userAuth) {
+      navigate(-1);
+    } else {
+      return;
+    }
+  }, [userAuth]);
 
   const {
     handleSubmit,
@@ -16,19 +27,22 @@ const Register = () => {
     reset,
   } = useForm();
 
+  useEffect(() => {
+    if (state?.registered?.firstName) {
+      navigate("/auth/login");
+    }
+  }, [state.registered]);
+
   const onSubmit = (data) => {
-    console.log(data);
     dispatch(registerUserAction(data));
     reset();
   };
   return (
     <section className="flex h-screen">
       {/* LEFT */}
-      <div className="flex bg-pink-200 p-16 flex-col w-[45%]">
-        <p className="font-bold italic text-2xl text-gray-400 opacity-80">
-          dribbble
-        </p>
-        <p className="my-5 text-4xl font-bold  text-gray-500 ">
+      <div className="flex bg-gradient-to-br from-black to-black/80 p-16 flex-col w-[45%]">
+        <p className="font-bold italic text-2xl text-white">Blogz</p>
+        <p className="my-5 text-4xl font-bold  text-white">
           Discover the world’s top Designers & Creatives.
         </p>
         <img src={address} className="rounded-xl" />
@@ -37,8 +51,12 @@ const Register = () => {
 
       <div className="bg-white w-full flex justify-center items-center ">
         <div className="w-[40%]">
-          <h1 className="text-4xl font-semibold">Sign up to Dribbble</h1>
-          {state?.appErr && <p className="text-red-500 mt-1">{state?.appErr}</p>}
+          <h1 className="text-4xl font-semibold">Sign up to Blogz</h1>
+          {state?.appErr && (
+            <p className="text-red-500 mt-1">{state?.appErr}</p>
+          )}
+          {state?.registered && <p className="text-green-500 mt-1">Success</p>}
+
           <form onSubmit={handleSubmit(onSubmit)} className="my-4">
             <div className="flex flex-col my-4">
               <label
@@ -52,7 +70,7 @@ const Register = () => {
                 name="firstName"
                 id="firstName"
                 autoFocus={true}
-                className="bg-gray-100 p-2 rounded-lg transition-all border-4 border-gray-100 focus:border-4 focus:border-pink-100 focus:bg-white outline-none"
+                className="bg-gray-100 p-2 rounded-lg transition-all border-4 border-gray-100 focus:border-4 focus:border-black/30 focus:bg-white outline-none"
                 {...register("firstName", {
                   required: "First name is required",
                   minLength: 3,
@@ -88,7 +106,7 @@ const Register = () => {
                 type="text"
                 name="lastName"
                 id="lastName"
-                className="bg-gray-100 p-2 rounded-lg transition-all border-4 border-gray-100 focus:border-4 focus:border-pink-100 focus:bg-white outline-none"
+                className="bg-gray-100 p-2 rounded-lg transition-all border-4 border-gray-100 focus:border-4 focus:border-black/30 focus:bg-white outline-none"
                 {...register("lastName", {
                   required: "Last name is required",
                   minLength: 3,
@@ -122,7 +140,7 @@ const Register = () => {
                 type="email"
                 name="email"
                 id="email"
-                className="bg-gray-100 p-2 rounded-lg transition-all border-4 border-gray-100 focus:border-4 focus:border-pink-100 focus:bg-white outline-none"
+                className="bg-gray-100 p-2 rounded-lg transition-all border-4 border-gray-100 focus:border-4 focus:border-black/30 focus:bg-white outline-none"
                 {...register("email", {
                   required: "Email is required",
                 })}
@@ -146,7 +164,7 @@ const Register = () => {
                 type="password"
                 name="password"
                 id="password"
-                className="bg-gray-100 p-2 rounded-lg transition-all border-4 border-gray-100 focus:border-4 focus:border-pink-100 focus:bg-white outline-none"
+                className="bg-gray-100 p-2 rounded-lg transition-all border-4 border-gray-100 focus:border-4 focus:border-black/30 focus:bg-white outline-none"
                 {...register("password", {
                   required: "Password is required",
                 })}
@@ -166,7 +184,7 @@ const Register = () => {
               </p>
             </Link>
 
-            <button className="bg-pink-500 text-white capitalize py-2 px-16 font-semibold rounded-md my-4">
+            <button className="bg-black text-white capitalize py-2 px-16 font-semibold rounded-md my-4">
               signup
             </button>
           </form>

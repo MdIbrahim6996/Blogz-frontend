@@ -1,26 +1,29 @@
 import { useForm } from "react-hook-form";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { passwordResetAction } from "../../../redux/slices/users/usersSlices";
 
 const address =
   "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRg_2Rfr-WwwMFEmy19tl00TlTUcmIhNUdomw&usqp=CAU";
 const ResetPassword = () => {
-  const dispatch = useDispatch()
-  const {token} = useParams()
+  const dispatch = useDispatch();
+  const { token } = useParams();
+  const state = useSelector((state) => state.users);
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm();
 
   const onSubmit = (data) => {
     const user = {
       password: data?.password,
-      token
-    }
-    dispatch(passwordResetAction(user))
-  }
+      token,
+    };
+    dispatch(passwordResetAction(user));
+    reset();
+  };
 
   return (
     <section className="flex h-screen">
@@ -39,6 +42,12 @@ const ResetPassword = () => {
       <div className="bg-white w-full flex justify-center items-center ">
         <div className="w-[40%]">
           <h1 className="text-4xl font-semibold capitalize">reset Password</h1>
+          {state?.appErr && (
+            <p className="text-red-500 mt-1">{state?.appErr}</p>
+          )}
+          {state?.passwordReset && (
+            <p className="text-green-500 mt-1">Password Reset Success</p>
+          )}
           <form onSubmit={handleSubmit(onSubmit)} className="my-4">
             <div className="flex flex-col my-4">
               <label
@@ -59,23 +68,19 @@ const ResetPassword = () => {
               />
 
               {errors?.password ? (
-                <p className="text-red-500 mt-1">
-                  {errors?.password?.message}
-                </p>
+                <p className="text-red-500 mt-1">{errors?.password?.message}</p>
               ) : (
                 <p></p>
               )}
               {errors?.password?.type === "minLength" ? (
-                <p className="text-red-500 mt-1">
-                  Password is too short
-                </p>
+                <p className="text-red-500 mt-1">Password is too short</p>
               ) : (
                 <p></p>
               )}
             </div>
             <button
               type="submit"
-              className="bg-pink-500 text-white capitalize py-2 px-16 font-semibold rounded-md my-4"
+              className="bg-black text-white capitalize py-2 px-16 font-semibold rounded-md my-4"
             >
               reset password
             </button>

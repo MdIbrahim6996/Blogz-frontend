@@ -8,10 +8,10 @@ import Post from "../../components/PostSection/Post/Post";
 const Home = () => {
   const { postLists, loading } = useSelector((state) => state.post);
   const [page, setPage] = useState(1);
-  const [category, setCategory] = useState("All")
+  const [category, setCategory] = useState("All");
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(fetchPostsAction({page, category}));
+    dispatch(fetchPostsAction({ page, category }));
   }, [page]);
   return (
     <div>
@@ -57,18 +57,34 @@ const Home = () => {
         </section>
       ) : (
         <section>
-          <h2 className="text-4xl font-semibold my-3 capitalize underline">latest posts</h2>
+          <h2 className="text-4xl font-semibold my-3 capitalize underline">
+            latest posts
+          </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {postLists?.posts?.map((post) => (
               <Post post={post} key={post._id} />
             ))}
           </div>
-          <button
-            onClick={() => setPage((prev) => prev + 1)}
-            className="bg-sky-500 py-1 px-4 rounded-md text-white text-sm my-2"
-          >
-            next
-          </button>
+          {postLists?.totalPages > 1 && (
+            <div className="space-x-3 flex items-center justify-center">
+              <button
+                onClick={() => setPage((prev) => prev - 1)}
+                className="bg-red-500 disabled:bg-red-500/50 py-1 px-4 cursor-pointer rounded-md text-white my-2"
+                disabled={page <= 1}
+              >
+                Prev
+              </button>
+              <p className="text-xl font-semibold">{page}</p>
+
+              <button
+                onClick={() => setPage((prev) => prev + 1)}
+                className="bg-sky-500 disabled:bg-sky-500/50 py-1 px-4 rounded-md text-white  my-2"
+                disabled={page >= postLists?.totalPages}
+              >
+                Next
+              </button>
+            </div>
+          )}
         </section>
       )}
     </div>

@@ -10,17 +10,16 @@ import ResetPassword from "./pages/Auth/ResetPassword/ResetPassword";
 import Profile from "./pages/Profile/Profile";
 import UploadPhoto from "./pages/Users/UploadPhoto/UploadPhoto";
 import UploadProfile from "./pages/Users/UpdateProfile/UpdateProfile";
-import ResetPasswordConfirmation from "./pages/Auth/ResetPasswordConfirmation/ResetPasswordConfirmation";
 import AccountVerificationConfirmation from "./pages/Auth/AccountVerificationConfirmation/AccountVerificationConfirmation";
 import Category from "./pages/Admin/Category/Category";
 import Posts from "./pages/Posts/Posts";
 import CreatePost from "./pages/Users/CreatePost/CreatePost";
-import ProfileSkeleton from "./pages/Profile/ProfileSkeleton";
 import AllUsers from "./pages/AllUsers/AllUsers";
 import AllUsersAdmin from "./pages/Admin/AllUsersAdmin/AllUsersAdmin";
 import AdminLayout from "./components/Layout/AdminLayout";
 import UserDetails from "./pages/Users/UserDetails/UserDetails";
 import Categories from "./pages/Categories/Categories";
+import UpdatePost from "./pages/Users/UpdatePost/UpdatePost";
 
 
 const router = createBrowserRouter([
@@ -39,6 +38,10 @@ const router = createBrowserRouter([
       {
         path: "post/:id",
         element: <PostDetail />,
+      },
+      {
+        path: "post/update/:id",
+        element: <UpdatePost />,
       },
       {
         path: "categories",

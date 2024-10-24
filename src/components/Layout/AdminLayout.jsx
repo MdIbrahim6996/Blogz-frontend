@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Outlet, ScrollRestoration } from 'react-router-dom';
+import { Link, Outlet, ScrollRestoration } from 'react-router-dom';
 import Footer from '../shared/Footer/Footer';
 import { useDispatch, useSelector } from 'react-redux';
 import AdminNavbar from '../shared/Navbar/AdminNavbar';

@@ -1,10 +1,14 @@
 import dayjs from "dayjs";
+import ReactHtmlParser from "react-html-parser";
+import { htmlToText } from "html-to-text";
+
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   fetchPostDetailsAction,
   toggleAddDisLikesToPost,
   toggleAddLikesToPost,
+  deletePostAction,
 } from "../../redux/slices/posts/postSlices";
 
 import { ThumbDownIcon, ThumbUpIcon } from "@heroicons/react/outline";
@@ -12,18 +16,26 @@ import { Link, useParams } from "react-router-dom";
 import Comments from "./Comments";
 import PostDetailSkeleton from "./PostDetailSkeleton";
 
-const src = `https://basho.fueko.net/content/images/size/w1200/2022/03/photo-1644478509397-27d9b27771fe.jpeg`;
-
 const PostDetail = () => {
   const dispatch = useDispatch();
   const { postDetails, loading } = useSelector((state) => state.post);
   const { userAuth } = useSelector((state) => state.users);
   const { likes, dislikes } = useSelector((state) => state.post);
   const { id } = useParams();
-
   useEffect(() => {
     dispatch(fetchPostDetailsAction(id));
   }, [id, dispatch, likes, dislikes]);
+
+  if (!postDetails) {
+    return (
+      <div className="h-[70vh] flex flex-col items-center justify-center">
+        <h1 className="text-7xl font-bold text-center">
+          <span className="block">404 ERROR :(</span>
+          <span className="text-4xl block">This Post Does Not Exist</span>
+        </h1>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -42,9 +54,8 @@ const PostDetail = () => {
                 {postDetails?.title}
               </h1>
               <p className="text-2xl mt-10 font-semibold text-gray-800">
-                {postDetails?.description.substring(0, 200)}...
+                {htmlToText(postDetails?.description).substring(0, 200)}...
               </p>
-
               <div className="space-x-3 my-4 flex">
                 <div className="text-center">
                   <ThumbUpIcon
@@ -78,6 +89,23 @@ const PostDetail = () => {
                 </div>
               </div>
 
+              {userAuth?.isAdmin || userAuth?.id === postDetails?.user?._id ? (
+                <div className="space-x-3 my-4 flex">
+                  <button
+                    onClick={() => dispatch(deletePostAction(postDetails?.id))}
+                    className="px-6 py-2 rounded-md bg-red-500 text-white"
+                  >
+                    Delete
+                  </button>
+
+                  <button className="px-6 py-2 rounded-md bg-green-500 text-white">
+                    <Link to={`/post/update/${postDetails?.id}`}>Update</Link>
+                  </button>
+                </div>
+              ) : (
+                <></>
+              )}
+
               <div className="mt-5 flex gap-3 items-center">
                 <div className="w-10 h-10 rounded-full overflow-hidden">
                   <img src={postDetails?.user?.profilePhoto} alt="" />
@@ -104,9 +132,9 @@ const PostDetail = () => {
           </section>
 
           <section className="my-20 w-[55%] mx-auto">
-            <p className="text-xl text-center mb-10">
-              {postDetails?.description}
-            </p>
+            <div className="text-xl text-justify mb-10">
+              {ReactHtmlParser(postDetails?.description)}
+            </div>
 
             <Comments />
           </section>

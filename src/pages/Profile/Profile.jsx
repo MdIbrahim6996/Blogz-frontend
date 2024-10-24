@@ -10,10 +10,15 @@ import {
 } from "../../redux/slices/users/usersSlices";
 import { fetchWeatherAction } from "../../redux/slices/weather/weatherSlices";
 import ProfileSkeleton from "./ProfileSkeleton";
+import { months } from "../../constants/dates";
 const src = `https://basho.fueko.net/content/images/size/w1200/2022/03/photo-1644478509397-27d9b27771fe.jpeg`;
 
 const d = new Date();
+
 const today = d.getDay();
+const currentDay = d.getDate();
+const currentMonth = d.getMonth();
+const currentYear = d.getFullYear();
 const day = [
   "Sunday",
   "Monday",
@@ -36,7 +41,6 @@ const Profile = () => {
 
   const getLocation = () => {
     if ("geolocation" in navigator) {
-      console.log("Available");
       navigator.geolocation.getCurrentPosition((position) => {
         dispatch(
           fetchWeatherAction({
@@ -172,10 +176,12 @@ const Profile = () => {
               </div>
             </div>
           </div>
-          <div className="bg-red-40 flex space-x-4 min-h-[50vh]">
-            <div className="bg-gradient-to-br my-16 max-h-[15rem] from-black to-black/60 shadow-md flex-1 capitalize p-4 rounded-md text-white font-semibold">
+          <div className="flex space-x-4 min-h-[50vh]">
+            <div className="bg-gradient-to-br my-16 max-h-[15rem] from-sky-500 to-sky-200 shadow-md flex-1 capitalize p-4 rounded-md text-white font-semibold">
               <p className=" text-4xl font-bold">{day[today]}</p>
-              <p className="text-xl">16 july 2023</p>
+              <p className="text-xl">
+                {currentDay + " " + months[currentMonth] + " " + currentYear}
+              </p>
               <p className="text-xl">{weatherInfo?.name}, in</p>
               <p className="text-5xl font-bold mt-10">
                 {Math.floor(weatherInfo?.main?.temp)}℃
@@ -189,22 +195,17 @@ const Profile = () => {
 
               <section className=" my-1">
                 <div className="grid grid-cols-3 gap-6">
-                  {profile?.post?.map((post) => (
-                    <Post post={post} key={post._id} />
-                  ))}
+                  {profile?.post ? (
+                    profile?.post?.map((post) => (
+                      <Post post={post} key={post._id} />
+                    ))
+                  ) : (
+                    <p className="text-center text-2xl text-gray-400">
+                      No posts to show
+                    </p>
+                  )}
                 </div>
               </section>
-              <p className="text-center text-2xl text-gray-400">
-                No posts to show
-              </p>
-              {/* <div className="grid grid-cols-2 gap-5 mx-auto w-[90%]">
-                <Post />
-                <Post />
-                <Post />
-                <Post />
-                <Post />
-                <Post />
-              </div> */}
             </div>
           </div>
         </div>

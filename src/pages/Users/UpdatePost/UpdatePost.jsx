@@ -1,21 +1,41 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import { createpostAction } from "../../../redux/slices/posts/postSlices";
+import {
+  fetchPostDetailsAction,
+  updatePostAction,
+} from "../../../redux/slices/posts/postSlices";
 import Select from "react-select";
 import { fetchCategoriesAction } from "../../../redux/slices/category/categorySlice";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import { useParams } from "react-router-dom";
 
-const CreatePost = () => {
+const UpdatePost = () => {
   const dispatch = useDispatch();
+  const { id } = useParams();
+
   const state = useSelector((state) => state.users);
+  const { postDetails } = useSelector((state) => state.post);
+
   const { categoryList } = useSelector((state) => state.category);
-  const [image, setImage] = useState(null);
   const [err, setErr] = useState([]);
   const [category, setCategory] = useState("");
-  const [value, setValue] = useState("");
+  const [image, setImage] = useState(postDetails?.image);
+  const [value, setValue] = useState(postDetails?.description);
 
+  useEffect(() => {
+    dispatch(fetchPostDetailsAction(id));
+  }, [id, dispatch]);
+
+  useEffect(() => {
+    reset({
+      title: postDetails?.title,
+    });
+    setImage(postDetails?.image);
+    setValue(postDetails?.description);
+    setCategory(postDetails?.category);
+  }, [postDetails]);
   useEffect(() => {
     dispatch(fetchCategoriesAction());
   }, []);
@@ -48,14 +68,24 @@ const CreatePost = () => {
   };
 
   const onSubmit = (data) => {
-    console.log({ ...data, image, category, value });
+    if (!category) {
+      setErr("No Category Selected :(");
+      return;
+    }
     dispatch(
-      createpostAction({ ...data, image, category: category?.value, description:value })
+      updatePostAction({
+        ...data,
+        image,
+        category: category?.value,
+        description: value,
+        id,
+      })
     );
     reset();
+    setErr("");
     setImage("");
-    setValue("")
-    setCategory("")
+    setValue("");
+    setCategory("");
   };
 
   return (
@@ -178,7 +208,7 @@ const CreatePost = () => {
             </div>
 
             <button className="bg-pink-500 text-white capitalize py-2 px-10 font-semibold rounded-md my-4">
-              create post
+              update post
             </button>
           </form>
         </div>
@@ -187,4 +217,4 @@ const CreatePost = () => {
   );
 };
 
-export default CreatePost;
+export default UpdatePost;
